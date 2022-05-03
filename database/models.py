@@ -10,20 +10,19 @@ db = SQLAlchemy()
 class Artistes(db.Model):
 
     id: int
-    nom: str
+    name: str
     created_at: datetime
     updated_at: datetime
 
     __tablename__ = "artistes"
-    id = db.column(db.Interger, primary_key=True, autoincrement=True)
-    name = db.column(db.String(), nullable=False, unique=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(), nullable=False, unique=True)
     # Auto generated timestamps for creation & update of the row
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
         db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-    def __init__(self, id, name):
-        self.id = id
+    def __init__(self, name):
         self.name = name
 
     def __repr__(self):
@@ -31,9 +30,10 @@ class Artistes(db.Model):
 
 
 @dataclass
-class concerts(db.Model):
-    id_concert: int
-    artiste: str
+class Concerts(db.Model):
+    id: int
+    
+    id_artiste: str
     date_debut: datetime
     date_fin: datetime
     spectacle: str
@@ -43,24 +43,24 @@ class concerts(db.Model):
     prix: float
 
     __tablename__ = "concerts"
-    id_concert = db.column(db.Interger, primary_key=True, autoincrement=True)
-    id_artiste = db.column(db.Interger, db.ForeignKey(
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    
+    id_artiste = db.Column(db.Integer, db.ForeignKey(
         'artistes.id'), nullable=False)
-    date_debut = db.column(db.DateTime)
-    date_fin = db.column(db.DateTime)
-    spectacle = db.column(db.String(), nullable=False)
-    festival = db.column(db.String())
-    salle = db.column(db.String(), nullable=False)
-    lieu = db.column(db.String(), nullable=False)
-    prix = db.column(db.Float(), nullable=False)
+    date_debut = db.Column(db.DateTime)
+    date_fin = db.Column(db.DateTime)
+    spectacle = db.Column(db.String(), nullable=False)
+    festival = db.Column(db.String())
+    salle = db.Column(db.String(), nullable=False)
+    lieu = db.Column(db.String(), nullable=False)
+    prix = db.Column(db.Float(), nullable=True)
 
     # Auto generated timestamps for creation & update of the row
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
         db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-    def __init__(self, id_concert, id_artiste, date_debut, date_fin, spectacle, festival, salle, lieu, prix):
-        self.id_concert = id_concert
+    def __init__(self, id_artiste, date_debut, date_fin, spectacle, festival, salle, lieu, prix):
         self.id_artiste = id_artiste
         self.date_debut = date_debut
         self.date_fin = date_fin
@@ -71,4 +71,4 @@ class concerts(db.Model):
         self.prix = prix
 
     def __repr__(self):
-        return f"<le concert {self.id_concert} a été fais par : {self.id_artiste} >"
+        return f"<le concert {self.id} a été fais par : {self.id_artiste} >"
